@@ -102,9 +102,6 @@ AUDIO_FEATURE_ENABLED_FM := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 TARGET_USES_QCOM_MM_AUDIO := true
 
-# Encryption
-TARGET_HW_DISK_ENCRYPTION := true
-
 # Hardware tunables framework
 BOARD_HARDWARE_CLASS := $(LOCAL_PATH)/cmhw/
 
@@ -113,6 +110,9 @@ BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
 BLUETOOTH_HCI_USE_MCT := true
+
+# Build
+TARGET_SYSTEMIMAGE_USE_SQUISHER := true
 
 # Storage & partiiton
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -148,65 +148,4 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 HAVE_SELINUX := true
 
 # SELinux
-BOARD_SEPOLICY_DIRS += \
-    device/motorola/condor/sepolicy
-
-BOARD_SEPOLICY_UNION += \
-    bluetooth_loader.te \
-    bridge.te \
-    camera.te \
-    device.te \
-    dhcp.te \
-    dnsmasq.te \
-    domain.te \
-    drmserver.te \
-    file_contexts \
-    file.te \
-    hostapd.te \
-    init_shell.te \
-    init.te \
-    libqc-opt.te \
-    mediaserver.te \
-    mpdecision.te \
-    netd.te \
-    netmgrd.te \
-    nfc.te \
-    property_contexts \
-    property.te \
-    qmux.te \
-    radio.te \
-    rild.te \
-    rmt.te \
-    sdcard_internal.te \
-    sdcardd.te \
-    sensors.te \
-    shell.te \
-    surfaceflinger.te \
-    system_server.te \
-    tee.te \
-    te_macros \
-    thermald.te \
-    ueventd.te \
-    vold.te \
-    wpa_supplicant.te \
-    zygote.te
-
-ifneq ($(TARGET_BUILD_VARIANT),user)
-    BOARD_SEPOLICY_UNION += su.te
-endif
-
-# Include an expanded selection of fonts
-EXTENDED_FONT_FOOTPRINT := true
-
-MALLOC_IMPL := dlmalloc
-
-# Enable dex-preoptimization to speed up first boot sequence
-ifeq ($(HOST_OS),linux)
-  ifeq ($(TARGET_BUILD_VARIANT),user)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-      WITH_DEXPREOPT_BOOT_IMG_ONLY := false
-    endif
-  endif
-endif
-WITH_DEXPREOPT_BOOT_IMG_ONLY ?= true
+include device/qcom/sepolicy/sepolicy.mk
